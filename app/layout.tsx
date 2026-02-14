@@ -22,6 +22,15 @@ export const metadata: Metadata = {
   title: "Lumen Internet On Demand | Flex Your Network",
   description: "Secure, fast connectivity from 100 Mbps to 100 Gbps. Pay only for bandwidth you use. Activate in 5 minutes. No contracts.",
   keywords: ["internet", "bandwidth", "on-demand", "connectivity", "enterprise", "network"],
+  robots: {
+    index: false,
+    follow: false,
+    nocache: true,
+    googleBot: {
+      index: false,
+      follow: false,
+    },
+  },
   openGraph: {
     title: "Lumen Internet On Demand",
     description: "Flex your network with consumption-based pricing. 100 Mbps to 100 Gbps in 5 minutes.",
