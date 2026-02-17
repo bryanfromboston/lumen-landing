@@ -1,17 +1,17 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 'use client'
 
-import { useState, useLayoutEffect } from 'react'
+import { useState, useEffect } from 'react'
 
 export function useSessionStorage<T>(key: string, initialValue: T) {
   const [storedValue, setStoredValue] = useState<T>(initialValue)
   const [isClient, setIsClient] = useState(false)
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     setIsClient(true)
   }, [])
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (!isClient) return
 
     try {
