@@ -42,9 +42,9 @@ Only after the visitor has met **both** conditions above are they "eligible" to 
 
 #### For desktop users
 
-Desktop (or other non-touch widescreen devices) who meet the above conditions are identified as about to exit in two ways:
+Desktop (or other non-touch widescreen devices) users who meet the above conditions are identified as about to exit in two ways:
 
-* They rapidly move their cursor to within a pre-determined distance from the top of the browser chrome (in this case, 10 pixes), indicating that they are likely about to hit the back button or close the browser tab, or
+* They rapidly move their cursor to within a pre-determined distance from the top of the browser chrome (in this case, 10 pixels), indicating that they are likely about to hit the back button or close the browser tab, or
 * The move their cursor outside of the browser window, indicating that they are about to give focus to another window other than the chrome.
 
 #### For mobile users
