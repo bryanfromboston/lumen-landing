@@ -60,6 +60,7 @@ export function useExitIntent(options: ExitIntentOptions = {}) {
   const [hasShown, setHasShown, isClient] = useSessionStorage('exit-intent-shown', false)
   const [timeOnPage, setTimeOnPage] = useState(0)
   const [scrollDepth, setScrollDepth] = useState(0)
+  const [maxScrollDepth, setMaxScrollDepth] = useState(0)
   const [isMobile, setIsMobile] = useState(false)
 
   // Detect if device is mobile/touch
@@ -102,10 +103,14 @@ export function useExitIntent(options: ExitIntentOptions = {}) {
       if (scrollableHeight > 0) {
         const depth = scrollTop / scrollableHeight
         setScrollDepth(depth)
+        setMaxScrollDepth((prev) => Math.max(prev, depth))
       }
     }
 
     handleScroll() // Initial calculation
+
+    // for performance, use passive event listener since we don't call preventDefault
+    //  TODO: Usually, scroll events can fire very frequently, so in a production implementation we might want to throttle this callback for better performance. For simplicity, we're updating state on every scroll event here.
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [isClient])
@@ -118,7 +123,7 @@ export function useExitIntent(options: ExitIntentOptions = {}) {
       if (
         e.clientY <= topThreshold &&
         timeOnPage >= minTimeOnPage &&
-        scrollDepth >= minScrollDepth &&
+        maxScrollDepth >= minScrollDepth &&
         !hasShown
       ) {
         setShowToast(true)
@@ -133,7 +138,7 @@ export function useExitIntent(options: ExitIntentOptions = {}) {
     hasShown,
     isMobile,
     timeOnPage,
-    scrollDepth,
+    maxScrollDepth,
     minTimeOnPage,
     minScrollDepth,
     topThreshold,
@@ -159,7 +164,7 @@ export function useExitIntent(options: ExitIntentOptions = {}) {
         scrollVelocity > 50 && // Scrolling up quickly (50px+ per scroll event)
         currentScrollY < 300 && // Near the top of the page
         timeOnPage >= minTimeOnPage &&
-        scrollDepth >= minScrollDepth &&
+        maxScrollDepth >= minScrollDepth &&
         !hasShown
       ) {
         setShowToast(true)
@@ -174,7 +179,7 @@ export function useExitIntent(options: ExitIntentOptions = {}) {
     hasShown,
     isMobile,
     timeOnPage,
-    scrollDepth,
+    maxScrollDepth,
     minTimeOnPage,
     minScrollDepth,
     setHasShown,
@@ -205,6 +210,6 @@ export function useExitIntent(options: ExitIntentOptions = {}) {
     /** Current scroll depth as a decimal (0-1, where 1 is fully scrolled) */
     scrollDepth,
     /** Whether the exit intent is eligible to show (meets time/scroll requirements and hasn't been shown) */
-    canShow: timeOnPage >= minTimeOnPage && scrollDepth >= minScrollDepth && !hasShown,
+    canShow: timeOnPage >= minTimeOnPage && maxScrollDepth >= minScrollDepth && !hasShown,
   }
 }
